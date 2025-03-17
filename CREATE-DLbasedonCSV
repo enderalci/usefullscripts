@@ -1,0 +1,22 @@
+$DistributionGroupName = Read-Host "Enter DistributionGroup Name"
+$CSVDG = $DistributionGroupName + ".csv"
+$path = "c:\temp\DL\" + $CSVDG
+
+
+#Split name to DisplayName
+
+$emailwithoutDomain = $DistributionGroupName.Split('@')[0]
+$DisplayName = $emailwithoutDomain.Replace( '.' , " ")
+
+#create the DL with Memberjoin & depart closed
+New-DistributionGroup -Name $DisplayName -PrimarySmtpAddress $DistributionGroupName -DisplayName $DisplayName -MemberJoinRestriction Closed -MemberDepartRestriction Closed
+
+
+Import-Csv $path |
+    ForEach-Object{
+   	    Add-DistributionGroupMember -identity $DistributionGroupName -member $_.PrimarySmtpAddress
+        
+    } 
+
+#Move the CSV to the migrated folder
+Move-Item -Path $path -Destination "C:\temp\DL\Migrated"
