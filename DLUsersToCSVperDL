@@ -1,0 +1,12 @@
+#Create a CSV for every DistributionList (List exported in EAC)
+
+$filepath ="c:\temp\dls\dls.csv"
+$DLS = Get-Content $filepath
+
+Foreach ($DL in $DLS){
+$Distri = $DL
+$path = "C:\TEMP\DLS\" + $Distri + ".csv"
+$path
+Get-DistributionGroupMember -Identity $Distri | export-csv -NoTypeInformation -Path $path
+
+}
