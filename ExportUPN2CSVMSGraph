@@ -1,4 +1,4 @@
-$DisplayName = "sApp-B6I-Timeregistration"
+$DisplayName = "Groupname"
 $Group = Get-mggroup -Filter "DisplayName eq '$DisplayName'" | Select-Object -ExpandProperty Id
 $PathCSV = "c:\temp\" + $DisplayName + ".csv"
 
