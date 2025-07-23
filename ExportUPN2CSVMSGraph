@@ -1,19 +1,22 @@
-$DisplayName = "sapp-b6i-timeregistration"
+#fill in the groupname
+$DisplayName = "groupname"
+
+#gets the GroupId
 $Group = Get-mggroup -Filter "DisplayName eq '$DisplayName'" | Select-Object -ExpandProperty Id
+
+#Specify your CSV location
 $PathCSV = "c:\temp\" + $DisplayName + ".csv"
+
+#Tests if CSV exists and if it exists delete the old CSV
 $TestPath = Test-Path -Path $PathCSV
-
-$users = Get-MgGroupMember -GroupId $Group -All | Select-Object -ExpandProperty Id
-
-
 if ($TestPath = "true")
 {
     Remove-Item -Path $PathCSV
 }
 
-
+#Gets UserID of every member, selects the UPN, export it to a CSV
+$users = Get-MgGroupMember -GroupId $Group -All | Select-Object -ExpandProperty Id
 foreach ($user in $users)
-
 {
     get-mguser -userId $user | Select-Object UserPrincipalName | Export-Csv $PathCSV -NoTypeInformation -Append
 }
