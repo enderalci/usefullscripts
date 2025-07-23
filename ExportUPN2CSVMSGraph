@@ -1,12 +1,19 @@
-$DisplayName = "Groupname"
+$DisplayName = "sapp-b6i-timeregistration"
 $Group = Get-mggroup -Filter "DisplayName eq '$DisplayName'" | Select-Object -ExpandProperty Id
 $PathCSV = "c:\temp\" + $DisplayName + ".csv"
+$TestPath = Test-Path -Path $PathCSV
 
 $users = Get-MgGroupMember -GroupId $Group -All | Select-Object -ExpandProperty Id
+
+
+if ($TestPath = "true")
+{
+    Remove-Item -Path $PathCSV
+}
+
 
 foreach ($user in $users)
 
 {
-    get-mguser -userId $user | Select-Object UserPrincipalName | Export-Csv -NoTypeInformation $PathCSV -Append
-
+    get-mguser -userId $user | Select-Object UserPrincipalName | Export-Csv $PathCSV -NoTypeInformation -Append
 }
