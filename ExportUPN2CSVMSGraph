@@ -7,11 +7,16 @@ $Group = Get-mggroup -Filter "DisplayName eq '$DisplayName'" | Select-Object -Ex
 #Specify your CSV location
 $PathCSV = "c:\temp\" + $DisplayName + ".csv"
 
-#Tests if CSV exists and if it exists delete the old CSV
+#Tests if CSV exists and if it exists delete the old CSV and creates a fresh one
 $TestPath = Test-Path -Path $PathCSV
-if ($TestPath = "true")
+
+if ($TestPath -eq "True") 
 {
-    Remove-Item -Path $PathCSV
+    Remove-Item $PathCSV
+}
+else
+{
+    New-Item $PathCSV
 }
 
 #Gets UserID of every member, selects the UPN, export it to a CSV
