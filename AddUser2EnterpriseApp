@@ -1,0 +1,19 @@
+$appname = 'App name here'
+$sp = Get-MgServicePrincipal -Filter "displayName eq '$appname'"
+
+$user = Get-MgUser -UserId "user@email.com"
+
+$params = @{
+    PrincipalId = $user.Id
+    ResourceId  = $sp.Id
+    #no approle = 00000000-0000-0000-0000-000000000000
+    AppRoleId   = "put approle ID here"
+}
+
+New-MgServicePrincipalAppRoleAssignment -ServicePrincipalId $sp.Id -BodyParameter $params
+
+Remove:
+
+$approles = Get-MgUserAppRoleAssignment -UserId $user.Id
+$approleid =  $approles | Where-Object ResourceDisplayName -eq $appname | Select-Object -ExpandProperty Id
+Remove-MgUserAppRoleAssignment -AppRoleAssignmentId $approleid -UserId $user.Id
